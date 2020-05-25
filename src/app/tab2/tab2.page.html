@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button fill="clear" slot="start" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+    <ion-title>Map</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="map-container">
+  <div class="map-frame" id="mapId" style="height:92%">
+    <ion-fab bottom id="menuButtons" class="menu-buttons">
+      <ion-fab-button (click) = "locatePosition()">
+        <ion-icon name="locate-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <ion-button fill="clear" id="refreshButton" (click)="findMe()">
+      <ion-icon slot="icon-only" name="navigate-circle-outline"></ion-icon>
+    </ion-button>
+  </div>
+ 
+</ion-content>
+
+

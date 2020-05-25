@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="chat-header clearfix">
+      <img src="https://img.icons8.com/cotton/2x/worldwide-location.png" alt="avatar" />
+      
+      <div class="chat-about">
+        <div class="chat-with">{{roomName}}</div>
+        <div class="chat-num-messages">already 5 messages</div>
+      </div>
+      <i class="fa fa-star"></i>
+    </div> 
+  
+  </ion-toolbar>
+</ion-header>
+<ion-content [scrollEvents]="true">
+  
+  <div class="stream" >
+    <!--
+    <ion-item lines="none" *ngFor="let message of messages" >
+      <ion-badge text-wrap  slot="start" class="item-text-wrap" color="danger" *ngIf="message.author != user" >{{ message.author }} : {{ message.message }}</ion-badge>
+      <ion-badge text-wrap slot="end" class="item-text-wrap" color="primary" *ngIf="message.author == user" >{{ message.message }}</ion-badge>
+      
+    </ion-item>
+    -->
+
+    <div class="chat" >
+      <div  *ngFor="let message of messages; let i = index;">
+
+        <div class="yours messages" color="danger" *ngIf="message.author != user">
+          
+          <p *ngIf="message.author != messages[i-1].author" class="yoursName">{{ message.author }}</p>
+          <div class="message">{{ message.message }}</div>
+        </div>
+
+        <div class="mine messages" color="primary" *ngIf="message.author == user">
+          <div class="message">{{ message.message }}</div>
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+</ion-content>
+
+<ion-footer >
+  <ion-grid>
+    
+    <ion-row>
+      <ion-col size="2" class="send-col">
+        <ion-fab bottom right  >
+          <ion-fab-button class="appButton" ><ion-icon name="apps" ></ion-icon></ion-fab-button>
+          
+          <ion-fab-list side="top">
+            <ion-fab-button (click)="myLocalisation()" large><ion-icon name="location"></ion-icon></ion-fab-button>
+            <ion-fab-button (click)="gifImage()" large><ion-icon name="image"></ion-icon></ion-fab-button>
+            <ion-fab-button ><ion-icon name="camera"></ion-icon></ion-fab-button>
+          </ion-fab-list>
+         
+        </ion-fab>
+        
+      </ion-col>
+      <ion-col size="8" class="input-col input-container" >
+        
+        
+      
+      
+        
+        <ion-input autocomplete="true" spellcheck="true" [(ngModel)]="messageText" type="text" placeholder="Entrez votre message" (keydown)="eventHandler($event)" name="message"></ion-input>
+      
+      </ion-col>
+      <span class="suggestion-container"></span>
+      <ion-col size="2" class="send-col">
+        <ion-button shape="full" (click)="sendMessage()">
+          <ion-icon name="paper-plane"></ion-icon>
+        </ion-button>
+      </ion-col>
+
+    </ion-row>
+    <ion-row *ngIf="imageclic">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
+
+          </ion-col>
+          <ion-col>
+            <img src="https://i.imgur.com/xwQzRkv.gif" alt="this slowpoke moves"  width=250/>
+          </ion-col>
+          <ion-col>
+            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
+          </ion-col>
+          <ion-col>
+            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
+          </ion-col>
+          <ion-col>
+            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-row>
+    <!--
+
+    
+    <ion-row>
+      <h1 class="suggestion-container">ss</h1>
+    </ion-row>-->
+    
+  </ion-grid>
+</ion-footer>
+

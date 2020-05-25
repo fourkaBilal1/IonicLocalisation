@@ -1,0 +1,256 @@
+console.clear();
+
+//faut que tu modifies ce bloc en fonction de ton prototype et il ne devrait plus y avoir d'erreurs
+
+const inputContainerEl = document.querySelector(".input-container");
+const textInputEl = document.querySelector("input#text");
+const suggestionEl = document.querySelector(".suggestion-container");
+const svgTabIcon = document.querySelector(".icon.tab-key");
+const svgEnterIcon = document.querySelector(".icon.enter-key");
+
+const ENTER_KEYCODE = 13;
+const TAB_KEYCODE = 9;
+const BACKSPACE_KEYCODE = 8;
+const UP_ARROW_KEYCODE = 38;
+const DOWN_ARROW_KEYCODE = 40;
+const LEFT_ARROW_KEYCODE = 37;
+const RIGHT_ARROW_KEYCODE = 39;
+const SPACE_KEYCODE = 32;
+
+let wordsArray = [
+    "html",
+    "css",
+    "javascript",
+    "jquery",
+    "ajax",
+    "react",
+    "angular",
+    "redux",
+    "bootstrap",
+    "php",
+    "yii",
+    "laravel",
+    "codigniter",
+    "mysql",
+    "java",
+    "python",
+    "django",
+    "ruby",
+    "c++",
+    "webpack",
+    "http",
+    "server",
+    "programming",
+    "development",
+    "website",
+    "app",
+    "frontend",
+    "backend",
+    "xml",
+    "api",
+    "algorithm",
+    "ssl",
+    "enrypt",
+    "decrypt",
+    "code",
+];
+
+// var matriceT = new Array();
+// for (let i = 0; i < wordsArray.length; i++) {
+//     matriceT[i] = new Array();
+// }
+// for (let i = 0; i < wordsArray.length; i++) {
+//     for (let j = 0; j < wordsArray.length; j++) {
+//         matriceT[i][j] = j + 1;
+//     }
+//     shuffle(matriceT[i]);
+// }
+
+// function shuffle(array) {
+//     var currentIndex = array.length,
+//         temporaryValue, randomIndex;
+
+//     // While there remain elements to shuffle...
+//     while (0 !== currentIndex) {
+
+//         // Pick a remaining element...
+//         randomIndex = Math.floor(Math.random() * currentIndex);
+//         currentIndex -= 1;
+
+//         // And swap it with the current element.
+//         temporaryValue = array[currentIndex];
+//         array[currentIndex] = array[randomIndex];
+//         array[randomIndex] = temporaryValue;
+//     }
+
+//     return array;
+// }
+
+// function nextWords(Mat, word) {
+//     var n;
+//     wordsArray.forEach(function(elem, index) {
+//         if (elem == word) {
+//             n = index;
+//         }
+//     });
+//     let list = Mat[n];
+//     let np = new Array(wordsArray.length);
+//     for (let i = 0; i < np.length; i++) {
+//         np[list[i] - 1] = wordsArray[i];
+//     };
+//     return np;
+// }
+
+
+
+let suggestedWord = "";
+let suggestedWordsArray = [];
+let currentWordIndex = 0;
+let insertText = false;
+
+textInputEl.addEventListener("input", e => {
+
+    let words = textInputEl.value.split(" ");
+    let lastWord = words[words.length - 1];
+    let lastWordLength = lastWord.length;
+    let inputValue = lastWord;
+
+
+    if (e['data'] != " ") {
+        insertText = true;
+    }
+    if (insertText == false) {
+        textInputEl.value = "";
+    }
+
+    suggestedWordsArray = filterArray(wordsArray, lastWord);
+    suggestedWord = suggestedWordsArray[0];
+
+    if (suggestedWord != undefined) {
+        suggestionEl.innerHTML = [e.target.value.slice(e.target.value.length, e.target.value.length - lastWordLength), suggestedWord].join('').replace(/ /g, "&nbsp;");
+    }
+
+    if (inputValue.length == 0 || suggestedWordsArray.length == 0) {
+        suggestionEl.innerHTML = "";
+    }
+
+    if (suggestedWordsArray.length != 0) {
+        svgTabIcon.classList.remove("hidden");
+        svgEnterIcon.classList.add("hidden");
+    } else {
+        svgTabIcon.classList.add("hidden");
+        svgEnterIcon.classList.remove("hidden");
+    }
+
+    if (inputValue.length == 0 || inputValue == suggestedWord) {
+        svgTabIcon.classList.add("hidden");
+        svgEnterIcon.classList.add("hidden");
+    }
+
+    if (textInputEl.value.length == 0) {
+        insertText = false;
+    }
+});
+
+textInputEl.addEventListener("keydown", e => {
+
+    let words = textInputEl.value.split(" ");
+    let lastWord = words[words.length - 1];
+    let lastWordLength = lastWord.length;
+    let inputValue = lastWord;
+
+    if (e.keyCode == ENTER_KEYCODE) {
+        if (textInputEl.value.length == 0) return;
+        let inputValue = textInputEl.value;
+        let words = inputValue.split(" ");
+        for (let i in words) {
+            if (words[i].length != 0) {
+                wordsArray.push(words[i]);
+                textInputEl.value = "";
+                suggestionEl.innerHTML = "";
+            }
+        }
+        var wordsArray = removeDuplicatesFromArray(wordsArray);
+        inputContainerEl.classList.add("animate");
+        svgTabIcon.classList.add("hidden");
+        svgEnterIcon.classList.add("hidden");
+        removeClassAfterAnimationCompletes(inputContainerEl, "animate");
+    }
+
+    if (textInputEl.value.length != 0) {
+        if (e.keyCode == UP_ARROW_KEYCODE) {
+            e.preventDefault();
+            if (currentWordIndex == 0) return;
+            currentWordIndex--;
+            //suggestionEl.innerHTML = suggestedWordsArray[currentWordIndex];
+            suggestionEl.innerHTML = textInputEl.value.slice(e.target.value.length, textInputEl.value.length - lastWordLength).concat(suggestedWordsArray[currentWordIndex]).replace(/ /g, "&nbsp;");
+        }
+
+        if (e.keyCode == DOWN_ARROW_KEYCODE) {
+            e.preventDefault();
+            if (currentWordIndex == suggestedWordsArray.length - 1) return;
+            currentWordIndex++;
+            //suggestionEl.innerHTML = suggestedWordsArray[currentWordIndex];
+            suggestionEl.innerHTML = [textInputEl.value.slice(e.target.value.length, textInputEl.value.length - lastWordLength), (suggestedWordsArray[currentWordIndex])].join('').replace(/ /g, "&nbsp;");
+        }
+
+        if (e.keyCode == LEFT_ARROW_KEYCODE || e.keyCode == RIGHT_ARROW_KEYCODE) {
+            suggestionEl.innerHTML = "";
+        }
+
+        if (e.keyCode == BACKSPACE_KEYCODE) {
+            currentWordIndex = 0;
+
+        }
+
+        if (e.keyCode == SPACE_KEYCODE) {
+            currentWordIndex = 0;
+        }
+    }
+
+    if (suggestedWord != undefined && suggestedWord != "") {
+        if (e.keyCode == TAB_KEYCODE) {
+            e.preventDefault();
+            textInputEl.value = [textInputEl.value.slice(0, textInputEl.value.length - lastWordLength), (suggestedWordsArray[currentWordIndex])].join('');
+            //textInputEl.value = textInputEl.value.replace(lastWord,suggestedWordsArray[currentWordIndex]);
+            suggestionEl.innerHTML = "";
+            svgTabIcon.classList.add("hidden");
+            svgEnterIcon.classList.add("hidden");
+            words = textInputEl.value.split(" ");
+            currentWordIndex = 0;
+
+        }
+    }
+
+
+});
+
+removeClassAfterAnimationCompletes(inputContainerEl, "animate");
+
+function removeClassAfterAnimationCompletes(el, className) {
+    let elStyles = window.getComputedStyle(inputContainerEl);
+    setTimeout(function() {
+        el.classList.remove(className);
+    }, +elStyles.animationDuration.replace("s", "") * 1000);
+}
+
+function filterArray(array, item, reverse = false) { //retourne les mots commencant par les memes lettres
+    if (reverse) {
+        return array
+            .filter(word => compareTwoStrings(word, item))
+            .sort((a, b) => a.length - b.length);
+    } else {
+        return array
+            .filter(word => compareTwoStrings(word, item))
+            .sort((a, b) => b.length - a.length);
+    }
+}
+
+function removeDuplicatesFromArray(array) {
+    return [...new Set(array.map(i => i))];
+}
+
+function compareTwoStrings(string, subString) {
+    let temp = string.split("", subString.length).join("");
+    if (subString == temp) return subString;
+}
