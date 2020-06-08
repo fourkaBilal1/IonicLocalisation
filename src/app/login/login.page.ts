@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../api/users.service';
 import { Router } from '@angular/router';
+import { NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,13 @@ export class LoginPage implements OnInit {
       found = true;
       if(found && form.value.password=='admin'){
         console.log("true");
-        this.router.navigateByUrl('/tabs/tab1');
+        //this.router.navigateByUrl('/tabs/tab1');
+        let navigationExtras: NavigationExtras = {
+          queryParams: {
+            special: JSON.stringify(form.value.email)
+          }
+        };
+        this.router.navigate( ['/tabs/tab1'],navigationExtras);
       }
       
     });

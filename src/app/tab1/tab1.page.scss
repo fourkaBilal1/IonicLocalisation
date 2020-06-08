@@ -10,7 +10,8 @@ ion-grid {
 	padding-left: 10px;
 }
 .send-col {
-	padding: 0px!important;
+  padding: 0px!important;
+
 }
 .send-col ion-button {
 	height: 100%!important;
@@ -72,6 +73,7 @@ ion-badge {
   .appButton{
     --border-radius	: 0;
     --color	: white;
+    height: 49px;
   }
 .item-text-wrap{
 
@@ -173,3 +175,44 @@ ion-badge {
   font-weight: 600;
   color: rgb(4, 106, 119);
 }
+.suggest{
+  text-align: center;
+  background-color: rgb(192, 192, 192);
+  
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin-bottom: -15px;
+  border-radius: 10px 10px 0 0;
+  p{
+    padding: 5px;
+  }
+}
+.gifside{
+  height: 20vh;
+}
+.gifItem{
+  margin: 5px;
+  border: 1px solid #ccc;
+  float: left;
+  width: 100px;
+
+
+}
+
+
+.gifItem img {
+  width: 100%;
+  height: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

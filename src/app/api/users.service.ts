@@ -16,7 +16,7 @@ export class UsersService {
     toast.present();
   }
   getSomeData(){
-    var encodedData = window.btoa("bilal" + ":" + "admin");	
+    var encodedData = window.btoa("admin" + ":" + "admin");	
     let headers = new HttpHeaders({
             'Authorization': 'Basic '+encodedData
 
@@ -27,18 +27,18 @@ export class UsersService {
   }
 
   getMessages(){
-    var encodedData = window.btoa("bilal" + ":" + "admin");	
+    var encodedData = window.btoa("admin" + ":" + "admin");	
     let headers = new HttpHeaders({
             'Authorization': 'Basic '+encodedData
           });
     let httpOptions = { headers: headers   };
-    return this.http.get('https://depinfo-chat.herokuapp.com/api/rooms/?format=json&title=bilal%27s%20room',httpOptions);
+    return this.http.get('https://depinfo-chat.herokuapp.com/api/rooms/?format=json',httpOptions);
   }
   login(form){
     return true;
   }
   sendMessages(author,message,room){
-    var encodedData = window.btoa("bilal" + ":" + "admin");	
+    var encodedData = window.btoa("admin" + ":" + "admin");	
     let headers = new HttpHeaders({
             'Authorization': 'Basic '+encodedData
           });

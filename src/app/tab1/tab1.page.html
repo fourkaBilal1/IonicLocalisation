@@ -5,7 +5,7 @@
       
       <div class="chat-about">
         <div class="chat-with">{{roomName}}</div>
-        <div class="chat-num-messages">already 5 messages</div>
+        <div class="chat-num-messages">already {{ messages.length }} messages</div>
       </div>
       <i class="fa fa-star"></i>
     </div> 
@@ -26,14 +26,24 @@
     <div class="chat" >
       <div  *ngFor="let message of messages; let i = index;">
 
-        <div class="yours messages" color="danger" *ngIf="message.author != user">
-          
-          <p *ngIf="message.author != messages[i-1].author" class="yoursName">{{ message.author }}</p>
+        <div class="yours messages" color="danger" *ngIf="message.author != user && message.type=='text'">
+          <p class="yoursName">{{ message.author }}</p>
           <div class="message">{{ message.message }}</div>
         </div>
 
-        <div class="mine messages" color="primary" *ngIf="message.author == user">
-          <div class="message">{{ message.message }}</div>
+        <div class="yours messages" color="danger" *ngIf="message.author != user && message.type=='link'">
+          
+          <p class="yoursName">{{ message.author }}</p>
+          <div class="message" style="background:#fff;"> <img src="{{message.message}}" alt="this slowpoke moves"  width=250/></div>
+        </div>
+
+
+        <div class="mine messages" color="primary" *ngIf="message.author == user && message.type=='text'">
+          <div  class="message">{{ message.message }}</div>
+        </div>
+
+        <div class="mine messages" color="primary" *ngIf="message.author == user && message.type=='link'" >
+          <div class="message" style="background:#fff;"><img src="{{message.message}}" alt="this slowpoke moves"  width=250/></div>
         </div>
       </div>
       
@@ -43,8 +53,11 @@
 </ion-content>
 
 <ion-footer >
+  <div *ngIf=" messageText!='' " (click)="suggestInsert()" class="suggest">
+    <p>{{suggestedText}}</p>
+  </div>
+  
   <ion-grid>
-    
     <ion-row>
       <ion-col size="2" class="send-col">
         <ion-fab bottom right  >
@@ -53,7 +66,6 @@
           <ion-fab-list side="top">
             <ion-fab-button (click)="myLocalisation()" large><ion-icon name="location"></ion-icon></ion-fab-button>
             <ion-fab-button (click)="gifImage()" large><ion-icon name="image"></ion-icon></ion-fab-button>
-            <ion-fab-button ><ion-icon name="camera"></ion-icon></ion-fab-button>
           </ion-fab-list>
          
         </ion-fab>
@@ -61,48 +73,37 @@
       </ion-col>
       <ion-col size="8" class="input-col input-container" >
         
-        
-      
-      
-        
-        <ion-input autocomplete="true" spellcheck="true" [(ngModel)]="messageText" type="text" placeholder="Entrez votre message" (keydown)="eventHandler($event)" name="message"></ion-input>
+        <ion-input autocomplete="true" spellcheck="true" [(ngModel)]="messageText" type="text" placeholder="Entrez votre message" (keydown)="eventHandlerK($event)" (input)="eventHandlerI($event)" name="message"></ion-input>
       
       </ion-col>
-      <span class="suggestion-container"></span>
+      
       <ion-col size="2" class="send-col">
         <ion-button shape="full" (click)="sendMessage()">
           <ion-icon name="paper-plane"></ion-icon>
         </ion-button>
       </ion-col>
 
-    </ion-row>
-    <ion-row *ngIf="imageclic">
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
-
-          </ion-col>
-          <ion-col>
-            <img src="https://i.imgur.com/xwQzRkv.gif" alt="this slowpoke moves"  width=250/>
-          </ion-col>
-          <ion-col>
-            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
-          </ion-col>
-          <ion-col>
-            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
-          </ion-col>
-          <ion-col>
-            <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width=250/>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-row>
+    </ion-row >
+    
+      <ion-row *ngIf="imageclic">
+        
+        <ion-grid>
+          
+          <ion-row class="gifside" >
+            <ion-content [scrollEvents]="true">
+              <div class="gifItem" *ngFor="let l of ListGif;let i = index" >
+                <div (click)="SendGif($event,i)">
+                  <img src="{{l}}" alt="this slowpoke moves"  width=250/>
+                  
+                </div>
+                
+              </div>
+            </ion-content>
+          </ion-row>
+          
+        </ion-grid>
+      
+      </ion-row>
     <!--
 
     
